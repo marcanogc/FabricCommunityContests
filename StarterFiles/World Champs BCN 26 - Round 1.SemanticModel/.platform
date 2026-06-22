@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "World Champs BCN 26 - Round 1"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9d664ec1-1af1-4eb0-9167-a35ed8242a04"
+  }
+}

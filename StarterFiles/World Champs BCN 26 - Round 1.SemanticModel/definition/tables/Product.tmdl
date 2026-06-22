@@ -1,0 +1,144 @@
+table Product
+	lineageTag: 642b74e7-7ea8-4d7b-b697-646553a9cf17
+
+	column ProductKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cf743fad-dd49-40c3-85a0-667ee39d085d
+		summarizeBy: none
+		sourceColumn: ProductKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SKU
+		dataType: string
+		lineageTag: fdceb282-94a1-41ab-9364-00b556c45c95
+		summarizeBy: none
+		sourceColumn: SKU
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProductName
+		dataType: string
+		lineageTag: f682053c-7d73-4479-85ff-e4310ffadab3
+		summarizeBy: none
+		sourceColumn: ProductName
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: a9d60f77-4317-4eae-a528-7aea49e3799d
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subcategory
+		dataType: string
+		lineageTag: 65dde5ce-50a9-4815-9a3a-a5b49ffc2a1f
+		summarizeBy: none
+		sourceColumn: Subcategory
+
+		annotation SummarizationSetBy = Automatic
+
+	column TeamType
+		dataType: string
+		lineageTag: eb6599f9-b444-4122-9649-4dfe87495a68
+		summarizeBy: none
+		sourceColumn: TeamType
+
+		annotation SummarizationSetBy = Automatic
+
+	column TeamName
+		dataType: string
+		lineageTag: 7215f962-8cb5-4fff-bb08-208af1fb55d8
+		summarizeBy: none
+		sourceColumn: TeamName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StarPlayer
+		dataType: string
+		lineageTag: 5b59c684-18a2-4fc7-ba8c-44ede49818b6
+		summarizeBy: none
+		sourceColumn: StarPlayer
+
+		annotation SummarizationSetBy = Automatic
+
+	column BrandLine
+		dataType: string
+		lineageTag: c55446da-4e1b-4b76-8d10-81c80276e1fc
+		summarizeBy: none
+		sourceColumn: BrandLine
+
+		annotation SummarizationSetBy = Automatic
+
+	column ReleaseSeason
+		dataType: string
+		lineageTag: e73b09db-d391-489b-9bed-bbd23ce61202
+		summarizeBy: none
+		sourceColumn: ReleaseSeason
+
+		annotation SummarizationSetBy = Automatic
+
+	column LaunchDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 22d69914-4b43-4c0f-8d2c-42a7b8b7380b
+		summarizeBy: none
+		sourceColumn: LaunchDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column BasePrice
+		dataType: int64
+		formatString: 0
+		lineageTag: b4b2ce1c-5453-4768-87e9-7054f088d188
+		summarizeBy: none
+		sourceColumn: BasePrice
+
+		annotation SummarizationSetBy = Automatic
+
+	column BaseCost
+		dataType: double
+		lineageTag: 59cef1b9-6d25-4663-b86a-40d8a41b68e0
+		summarizeBy: none
+		sourceColumn: BaseCost
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IsLimitedEdition
+		dataType: int64
+		formatString: 0
+		lineageTag: db926ffe-3ca4-4ec8-9685-c367e296d4f4
+		summarizeBy: none
+		sourceColumn: IsLimitedEdition
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Product = m
+		mode: import
+		queryGroup: 'Dimension Tables'
+		source =
+				let
+				    Source = #"Source Data",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "DimProduct.csv")),
+				    Content = #"Filtered Rows"{0}[Content],
+				    #"Imported CSV" = Csv.Document(Content,[Delimiter=",", Columns=14, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Imported CSV", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProductKey", Int64.Type}, {"SKU", type text}, {"ProductName", type text}, {"Category", type text}, {"Subcategory", type text}, {"TeamType", type text}, {"TeamName", type text}, {"StarPlayer", type text}, {"BrandLine", type text}, {"ReleaseSeason", type text}, {"LaunchDate", type date}, {"BasePrice", Int64.Type}, {"BaseCost", type number}, {"IsLimitedEdition", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

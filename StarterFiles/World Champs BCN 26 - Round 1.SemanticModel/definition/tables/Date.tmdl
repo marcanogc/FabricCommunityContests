@@ -1,0 +1,176 @@
+table Date
+	lineageTag: b165463f-6c15-47ae-95a4-c2353f4af183
+
+	column DateKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3e93857f-a9ca-4c7e-b2ca-dbbfb09b23cd
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: af889dad-1e3d-4795-a150-b8f0e4287efb
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Year
+		dataType: int64
+		formatString: 0
+		lineageTag: 7b5e0f1e-0165-4ec8-8bdb-d664f2a4afac
+		summarizeBy: sum
+		sourceColumn: Year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quarter
+		dataType: string
+		lineageTag: e708bb1a-6510-4354-bbbd-5a44975a3550
+		summarizeBy: none
+		sourceColumn: Quarter
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthNumber
+		dataType: int64
+		formatString: 0
+		lineageTag: a80d265f-1a50-48dc-adee-bee21f71c769
+		summarizeBy: sum
+		sourceColumn: MonthNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column MonthName
+		dataType: string
+		lineageTag: 50757077-c11b-489b-b583-39edc2be2841
+		summarizeBy: none
+		sourceColumn: MonthName
+
+		annotation SummarizationSetBy = Automatic
+
+	column YearMonth
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1f941ed1-6b23-48a6-94fb-c005f1230e03
+		summarizeBy: none
+		sourceColumn: YearMonth
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column WeekOfYear
+		dataType: int64
+		formatString: 0
+		lineageTag: d80d7f99-d1a7-4654-842a-a18b188a1d4f
+		summarizeBy: sum
+		sourceColumn: WeekOfYear
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeek
+		dataType: string
+		lineageTag: 1135eaa2-a271-4614-84d7-1a7388d9ee09
+		summarizeBy: none
+		sourceColumn: DayOfWeek
+
+		annotation SummarizationSetBy = Automatic
+
+	column DayOfWeekNum
+		dataType: int64
+		formatString: 0
+		lineageTag: 8e3467d2-5dc2-4dd4-8781-8edb8242744c
+		summarizeBy: sum
+		sourceColumn: DayOfWeekNum
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsWeekend
+		dataType: int64
+		formatString: 0
+		lineageTag: b530177c-1598-49d5-ad39-3cc461a55594
+		summarizeBy: sum
+		sourceColumn: IsWeekend
+
+		annotation SummarizationSetBy = Automatic
+
+	column SeasonLabel
+		dataType: string
+		lineageTag: d367b165-6617-4416-8bb4-fc1afb450008
+		summarizeBy: none
+		sourceColumn: SeasonLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column MomentLabel
+		dataType: string
+		lineageTag: 2341fd09-3563-4948-a3b0-d0ab2823dfe0
+		summarizeBy: none
+		sourceColumn: MomentLabel
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsTournamentWindow
+		dataType: int64
+		formatString: 0
+		lineageTag: 0a3c5828-0624-4503-8af2-1db061086d66
+		summarizeBy: sum
+		sourceColumn: IsTournamentWindow
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsTransferWindow
+		dataType: int64
+		formatString: 0
+		lineageTag: b269d369-5890-4439-98f5-c1fb8b84ab6a
+		summarizeBy: sum
+		sourceColumn: IsTransferWindow
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsHolidayPeak
+		dataType: int64
+		formatString: 0
+		lineageTag: 56eea1b4-9208-46d1-9b75-8008a0079d63
+		summarizeBy: sum
+		sourceColumn: IsHolidayPeak
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLeagueLaunch
+		dataType: int64
+		formatString: 0
+		lineageTag: 57fd8418-03d1-4316-b585-eee859469a23
+		summarizeBy: sum
+		sourceColumn: IsLeagueLaunch
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Date = m
+		mode: import
+		queryGroup: 'Dimension Tables'
+		source =
+				let
+				    Source = #"Source Data",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "DimDate.csv")),
+				    Content = #"Filtered Rows"{0}[Content],
+				    #"Imported CSV" = Csv.Document(Content,[Delimiter=",", Columns=17, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Imported CSV", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"DateKey", Int64.Type}, {"Date", type date}, {"Year", Int64.Type}, {"Quarter", type text}, {"MonthNumber", Int64.Type}, {"MonthName", type text}, {"YearMonth", type date}, {"WeekOfYear", Int64.Type}, {"DayOfWeek", type text}, {"DayOfWeekNum", Int64.Type}, {"IsWeekend", Int64.Type}, {"SeasonLabel", type text}, {"MomentLabel", type text}, {"IsTournamentWindow", Int64.Type}, {"IsTransferWindow", Int64.Type}, {"IsHolidayPeak", Int64.Type}, {"IsLeagueLaunch", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

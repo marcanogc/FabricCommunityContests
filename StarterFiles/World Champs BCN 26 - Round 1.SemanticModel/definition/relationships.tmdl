@@ -1,0 +1,32 @@
+relationship 73a3abcb-b151-cb56-6034-411b13dab04c
+	fromColumn: Sales.DateKey
+	toColumn: Date.DateKey
+
+relationship 47d17e53-0085-3e9a-43f5-333a271a7da3
+	fromColumn: Sales.CustomerKey
+	toColumn: Customer.CustomerKey
+
+relationship ec9df879-4dac-0e18-f577-6fdde7452150
+	fromColumn: Sales.RegionKey
+	toColumn: Region.RegionKey
+
+relationship 099965ab-a8c1-3c7c-da87-95db4deed7c1
+	fromColumn: Sales.ProductKey
+	toColumn: Product.ProductKey
+
+relationship ca2eee95-70b2-730c-b9cb-d559445ac0a0
+	fromColumn: Sales.ChannelKey
+	toColumn: Channel.ChannelKey
+
+relationship 575b1229-d638-6f7b-718f-9dc75aac1d76
+	fromColumn: Traffic.ChannelKey
+	toColumn: Channel.ChannelKey
+
+relationship 34b6cb98-4799-3e0a-3fea-98e79db9df3f
+	fromColumn: Traffic.DateKey
+	toColumn: Date.DateKey
+
+relationship 1ccb9fa2-f6c7-5cfe-bec2-1b5c178f5bb5
+	fromColumn: Traffic.RegionKey
+	toColumn: Region.RegionKey
+

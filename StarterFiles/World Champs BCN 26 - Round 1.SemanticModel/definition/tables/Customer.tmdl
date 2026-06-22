@@ -1,0 +1,105 @@
+table Customer
+	lineageTag: a17c2be5-87e8-483f-82ff-9ad920200790
+
+	column CustomerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: cdf9da0d-893b-4bc9-a486-5c64e5fa8831
+		summarizeBy: none
+		sourceColumn: CustomerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0dd81324-0c28-4731-945b-630881d2489c
+		summarizeBy: none
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column HomeCountry
+		dataType: string
+		lineageTag: 9ebb8e3e-346c-4a30-bfd7-4ec3f3bd54be
+		summarizeBy: none
+		sourceColumn: HomeCountry
+
+		annotation SummarizationSetBy = Automatic
+
+	column MacroRegion
+		dataType: string
+		lineageTag: 9349c2d7-a926-4252-86e3-b3c232a321a0
+		summarizeBy: none
+		sourceColumn: MacroRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	column Segment
+		dataType: string
+		lineageTag: 9e06302c-813b-42ba-8e1e-516d264d5f69
+		summarizeBy: none
+		sourceColumn: Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column AcquisitionChannel
+		dataType: string
+		lineageTag: ef1ef5d4-e8d0-4ddd-a02d-fc6b436657ff
+		summarizeBy: none
+		sourceColumn: AcquisitionChannel
+
+		annotation SummarizationSetBy = Automatic
+
+	column JoinDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a2105d0c-e2ec-4335-bce2-73a532df2d01
+		summarizeBy: none
+		sourceColumn: JoinDate
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column TenureBucket
+		dataType: string
+		lineageTag: 1e928d6f-1eba-4b47-8f5d-d848a289d6a5
+		summarizeBy: none
+		sourceColumn: TenureBucket
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLoyaltyMember
+		dataType: int64
+		formatString: 0
+		lineageTag: 9886dcb8-67c2-45c9-bc06-3d53580f79d7
+		summarizeBy: none
+		sourceColumn: IsLoyaltyMember
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Customer = m
+		mode: import
+		queryGroup: 'Dimension Tables'
+		source =
+				let
+				    Source = #"Source Data",
+				    #"Filtered Rows" = Table.SelectRows(Source, each ([Name] = "DimCustomer.csv")),
+				    Content = #"Filtered Rows"{0}[Content],
+				    #"Imported CSV" = Csv.Document(Content,[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Imported CSV", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"CustomerKey", Int64.Type}, {"RegionKey", Int64.Type}, {"HomeCountry", type text}, {"MacroRegion", type text}, {"Segment", type text}, {"AcquisitionChannel", type text}, {"JoinDate", type date}, {"TenureBucket", type text}, {"IsLoyaltyMember", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
